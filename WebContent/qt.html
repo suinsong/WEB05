@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+<style type="text/css">
+body {
+	font-size: 12px;
+}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#btn").click(parsing);
+
+	});
+
+	function parsing() {
+		$.ajax({
+			url : "qt.do", //QtController.java--->www.su.or.kr
+			type : "get",
+			dataType : "html",
+			success : resultHtml,
+			error : function() {
+				alert("error");
+			}
+
+		});
+
+	}
+
+	function resultHtml(data) {
+		var subject = $(data).find(".subject").text();
+		//alert(subject);
+		$("#msg").empty();
+		$("#msg").append("제목:" + subject);
+
+		var book_line = $(data).find(".book_line").text();
+		//alert(subject);
+		$("#msg1").empty();
+		$("#msg1").append("본문:" + $.trim(book_line));
+
+		var len = $(data).find("th").length;
+		//alert(len);
+		var bible = "<table>"
+		for (var i = 0; i < len; i++) {
+			bible += "<tr>"
+			var num = $(data).find("th").eq(i).text();
+			var td = $(data).find("td").eq(i).text();
+			bible += "<td>" + num + ". </td>";
+			bible += "<td>" + td + "</td>";
+			bible += "</tr>"
+		}
+		bible += "</table>"
+
+		$("#msg2").empty();
+		$("#msg2").append(bible);
+
+	}
+</script>
+
+
+</head>
+<body>
+	<button id="btn">HTML Parsing</button>
+	<hr>
+	<br>
+	<fieldset>
+		<legend> 오늘의 묵상 </legend>
+		<div id="msg"></div>
+		<div id="msg1"></div>
+		<div id="msg2"></div>
+	</fieldset>
+
+
+
+
+</body>
+</html>
